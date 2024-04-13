@@ -145,22 +145,33 @@ class MainWindow(QMainWindow):
 
     def process_data(self):
         if self.open_file_name == "":
-            self.error_message = MessageBox("Error", "请先选择要查询的图片!", self)
-            self.error_message.cancelButton.hide()
-            self.error_message.exec()
+            error_message = MessageBox("Error", "请先选择要查询的图片!", self)
+            error_message.cancelButton.hide()
+            error_message.exec()
         else:
-            self.progress_dialog = CustomMessageBox(self)
-            self.data_processor = DataProcessor()
-            self.data_processor.finished.connect(self.close_progress_dialog)
-            self.data_processor.start()
-            self.progress_dialog.move(
-                self.frameGeometry().center() - self.progress_dialog.rect().center()
-            )
-            self.progress_dialog.exec()
+            img = os.path.basename(self.open_file_name)
+            print(img)
+            utm = self.getUtm(img)
+            print(utm)
+            if utm != "":
+                self.progress_dialog = CustomMessageBox(self)
+                self.data_processor = DataProcessor(img=img, utm=utm)
+                self.data_processor.finished.connect(self.close_progress_dialog)
+                self.data_processor.start()
+                self.progress_dialog.move(
+                    self.frameGeometry().center() - self.progress_dialog.rect().center()
+                )
+                self.progress_dialog.exec()
 
-            # 处理完成之后显示图片
-            self.sidebar_image_label.open_image = self.open_file_name
-            self.show_image()
+                # 处理完成之后显示图片
+                self.sidebar_image_label.open_image = self.open_file_name
+                self.show_image()
+            else:
+                error_message = MessageBox(
+                    "Error", "选择的图片无效，请选择data/query文件夹中的图片", self
+                )
+                error_message.cancelButton.hide()
+                error_message.exec()
 
     def close_progress_dialog(self):
         self.progress_dialog.change()
@@ -190,6 +201,20 @@ class MainWindow(QMainWindow):
                 Qt.AspectRatioMode.KeepAspectRatio,
             )
         )
+
+    def getUtm(self, img):
+        loaded_dict = {}
+        with open('./data/query_dict.txt', 'r') as file:
+            for line in file:
+                key, value = line.strip().split(': ')
+                loaded_dict[key] = value
+
+        try:
+            utm = loaded_dict[img]
+        except KeyError as e:
+            return ""
+        else:
+            return utm
 
 
 class ClickableLabel(QLabel):
@@ -234,9 +259,14 @@ class ClickableLabel(QLabel):
 class DataProcessor(QThread):
     '''数据处理部分，用于将选择的图片传入，模型处理，并输出处理结果'''
 
+    def __init__(self, img, utm):
+        super().__init__()
+        self.img = img
+        self.utm = utm
+
     def run(self):
         # 调用模型的test，返回得到的文件路径
-        image_paths = searchForImg()
+        image_paths = searchForImg(self.img, self.utm)
         # folder_path = './dataForTest/'
         # image_paths = [
         #     os.path.join(folder_path, f)

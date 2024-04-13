@@ -44,6 +44,11 @@ def get_whole_test_set():
     return WholeDatasetFromStruct(structFile, input_transform=input_transform())
 
 
+def get_test_set_for_one_query(img, utm):
+    structFile = join(root_dir, 'search.txt')
+    return WholeDatasetFromStruct(structFile, img=img, utm=utm, input_transform=input_transform())
+
+
 def get_training_query_set(margin=0.1):
     structFile = join(root_dir, 'train.txt')
     return QueryDatasetFromStruct(structFile, input_transform=input_transform(), margin=margin)
@@ -77,7 +82,7 @@ dbStruct = namedtuple(
 )
 
 
-def parse_dbStruct(path):
+def parse_dbStruct(path, img="", utm=""):
     with open(path, 'r') as f:
         data = f.readlines()
 
@@ -155,6 +160,29 @@ def parse_dbStruct(path):
         # numQ = 7072
         numQ = 1
 
+    elif whichSet == 'search':
+        # dbImage = data[:21216]
+        dbImage = data[:10]
+        # utmDb_list = data[21216:42432]
+        utmDb_list = data[21216:21226]
+        utmDb = [line.split(',') for line in utmDb_list]
+        for i in range(len(utmDb)):
+            for j in range(2):
+                utmDb[i][j] = float(utmDb[i][j])
+        utmDb = np.array(utmDb)
+
+        qImage = [img]
+        utmQ_list = [utm]
+        utmQ = [line.split(',') for line in utmQ_list]
+        for i in range(len(utmQ)):
+            for j in range(2):
+                utmQ[i][j] = float(utmQ[i][j])
+        utmQ = np.array(utmQ)
+
+        # numDb = 21216
+        numDb = 10
+        numQ = 1
+
     posDistThr = 25
     posDistSqThr = 625
     nonTrivPosDistSqThr = 100
@@ -175,12 +203,12 @@ def parse_dbStruct(path):
 
 
 class WholeDatasetFromStruct(data.Dataset):
-    def __init__(self, structFile, input_transform=None, onlyDB=False):
+    def __init__(self, structFile, img="", utm="", input_transform=None, onlyDB=False):
         super().__init__()
 
         self.input_transform = input_transform
 
-        self.dbStruct = parse_dbStruct(structFile)
+        self.dbStruct = parse_dbStruct(structFile, img=img, utm=utm)
         self.images = [join(database_dir, dbIm) for dbIm in self.dbStruct.dbImage]
         if not onlyDB:
             self.images += [join(queries_dir, qIm) for qIm in self.dbStruct.qImage]

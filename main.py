@@ -314,11 +314,11 @@ def test(eval_set, opt, epoch=0, write_tboard=False):
             writer.add_scalar('Val/Recall@' + str(n), recall_at_n[i], epoch)
 
     # TODO 处理predIndex以得到图片的路径
-    file_path = [
-        os.path.join('./dataForTest/', f)
-        for f in os.listdir('./dataForTest/')
-        if os.path.isfile(os.path.join('./dataForTest/', f))
-    ]
+    predIndex = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    file_path = []
+    for index in predIndex:
+        path = './data/database/' + eval_set.dbStruct.dbImage[index]
+        file_path.append(path)
 
     return recalls, file_path
 
@@ -406,7 +406,7 @@ class L2Norm(nn.Module):
         return F.normalize(input, p=2, dim=self.dim)
 
 
-def searchForImg():
+def searchForImg(img, utm):
     warnings.filterwarnings('ignore')
     opt = parser.parse_args()
 
@@ -473,7 +473,7 @@ def searchForImg():
 
     if opt.mode.lower() == 'test':
         if opt.split.lower() == 'test':
-            whole_test_set = dataset.get_whole_test_set()
+            whole_test_set = dataset.get_test_set_for_one_query(img=img, utm=utm)
             print('===> Evaluating on test set')
         else:
             raise ValueError('Unknown dataset split: ' + opt.split)
