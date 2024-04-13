@@ -1,0 +1,19 @@
+        # print(self.data_processor.image_paths)
+        # self.image_label_temp = []
+        # for i in range(0, len(self.data_processor.image_paths)):
+        #     image_label = QLabel()
+        #     image_label.setMaximumSize(300, 300)
+        #     self.image_label_temp.append(image_label)
+        # for i in range(0, len(self.image_label_temp)):
+        #     self.right_layout.addWidget(self.image_label_temp[i])
+        #     self.image_label_temp[i].setStyleSheet(
+        #         "QLabel {border: 3 solid black; border-radius: 0px}"
+        #     )
+        #     pixmap = QPixmap(self.data_processor.image_paths[i])
+        #     self.image_label_temp[i].setPixmap(
+        #         pixmap.scaled(
+        #             image_label.width(),
+        #             image_label.height(),
+        #             Qt.AspectRatioMode.KeepAspectRatio,
+        #         )
+        #     )
