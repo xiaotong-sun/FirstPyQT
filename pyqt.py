@@ -267,7 +267,7 @@ class DataProcessor(QThread):
     def run(self):
         # 调用模型的test，返回得到的文件路径
         image_paths = searchForImg(self.img, self.utm)
-        # folder_path = './dataForTest/'
+        # folder_path = 'C:/Users/84097/Desktop/figure/'
         # image_paths = [
         #     os.path.join(folder_path, f)
         #     for f in os.listdir(folder_path)
@@ -275,7 +275,7 @@ class DataProcessor(QThread):
         # ]
 
         combined_image = self.combine_images(image_paths)
-        combined_image.save('C:/Users/84097/Desktop/1.jpg')
+        combined_image.save('./combined_image.jpg')
 
         self.finished.emit()
 

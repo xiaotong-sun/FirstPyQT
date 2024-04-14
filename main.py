@@ -314,7 +314,6 @@ def test(eval_set, opt, epoch=0, write_tboard=False):
             writer.add_scalar('Val/Recall@' + str(n), recall_at_n[i], epoch)
 
     # TODO 处理predIndex以得到图片的路径
-    predIndex = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     file_path = []
     for index in predIndex:
         path = './data/database/' + eval_set.dbStruct.dbImage[index]
