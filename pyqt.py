@@ -129,9 +129,8 @@ class MainWindow(QMainWindow):
         self.clear_image()
         # 打开文件选择对话框
         self.open_file_name, _ = QFileDialog.getOpenFileName(
-            self, "Open Image", "", "Image Files (*.jpg *.jpeg *.png *.bmp *.gif)"
+            self, "Open Image", "./data/search", "Image Files (*.jpg *.jpeg *.png *.bmp *.gif)"
         )
-        print(self.open_file_name)
         if self.open_file_name:
             # 当选择了文件后，创建一个 QPixmap 对象并将其设置到 QLabel 中显示
             pixmap = QPixmap(self.open_file_name)
@@ -150,9 +149,9 @@ class MainWindow(QMainWindow):
             error_message.exec()
         else:
             img = os.path.basename(self.open_file_name)
-            print(img)
+            print("选择的图片为：" + img)
             utm = self.getUtm(img)
-            print(utm)
+            print("图片对应的utm为：" + utm + "\n")
             if utm != "":
                 self.progress_dialog = CustomMessageBox(self)
                 self.data_processor = DataProcessor(img=img, utm=utm)
@@ -168,7 +167,7 @@ class MainWindow(QMainWindow):
                 self.show_image()
             else:
                 error_message = MessageBox(
-                    "Error", "选择的图片无效，请选择data/query文件夹中的图片", self
+                    "Error", "选择的图片无效，请选择data/search文件夹中的图片", self
                 )
                 error_message.cancelButton.hide()
                 error_message.exec()
@@ -185,7 +184,7 @@ class MainWindow(QMainWindow):
     def show_image(self):
         self.image_label.clear()
         self.sidebar_image_label.clear()
-        pixmap = QPixmap('C:/Users/84097/Desktop/1.jpg')
+        pixmap = QPixmap('./combined_image.jpg')
         self.image_label.setPixmap(
             pixmap.scaled(
                 self.image_label.width(),

@@ -135,36 +135,28 @@ def parse_dbStruct(path, img="", utm=""):
         numQ = 7070
 
     elif whichSet == 'test':
-        # dbImage = data[:21216]
-        dbImage = data[:10]
-        # utmDb_list = data[21216:42432]
-        utmDb_list = data[21216:21226]
+        dbImage = data[:21216]
+        utmDb_list = data[21216:42432]
         utmDb = [line.split(',') for line in utmDb_list]
         for i in range(len(utmDb)):
             for j in range(2):
                 utmDb[i][j] = float(utmDb[i][j])
         utmDb = np.array(utmDb)
 
-        # qImage = data[42432:49504]
-        qImage = data[42432:40433]
-        # utmQ_list = data[49504:56576]
-        utmQ_list = data[49504:49505]
+        qImage = data[42432:49504]
+        utmQ_list = data[49504:56576]
         utmQ = [line.split(',') for line in utmQ_list]
         for i in range(len(utmQ)):
             for j in range(2):
                 utmQ[i][j] = float(utmQ[i][j])
         utmQ = np.array(utmQ)
 
-        # numDb = 21216
-        numDb = 10
-        # numQ = 7072
-        numQ = 1
+        numDb = 21216
+        numQ = 7072
 
     elif whichSet == 'search':
-        # dbImage = data[:21216]
-        dbImage = data[:10]
-        # utmDb_list = data[21216:42432]
-        utmDb_list = data[21216:21226]
+        dbImage = data[:21216]
+        utmDb_list = data[21216:42432]
         utmDb = [line.split(',') for line in utmDb_list]
         for i in range(len(utmDb)):
             for j in range(2):
@@ -179,8 +171,7 @@ def parse_dbStruct(path, img="", utm=""):
                 utmQ[i][j] = float(utmQ[i][j])
         utmQ = np.array(utmQ)
 
-        # numDb = 21216
-        numDb = 10
+        numDb = 21216
         numQ = 1
 
     posDistThr = 25

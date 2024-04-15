@@ -1,3 +1,8 @@
+"""
+    这个文件用于将test测试集中query对应的图片从query文件夹中筛选出来并copy到search文件夹中
+    方便我们在里面选择一张图片进行匹配
+"""
+
 import os
 import shutil
 from tqdm import tqdm
@@ -7,7 +12,7 @@ source_folder = './data/query'
 destination_folder = './data/search'
 
 # 读取文件名列表
-with open('./data/search.txt', 'r') as file:
+with open('./data/query_in_test.txt', 'r') as file:
     lines = file.readlines()
 
 gap = len(lines) // 2
