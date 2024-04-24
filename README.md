@@ -15,7 +15,7 @@ QT_nanjing/data文件夹下的所有文件也需要复制到code_nanjing/data文
 ```bash
 pip install PyQt6
 
-pip install PyQt-Fluent-Widgets -i https://pypi.org/simple/
+pip install PyQt6-Fluent-Widgets -i https://pypi.org/simple/
 ```
 
 ## 3. 构建查询图片库
